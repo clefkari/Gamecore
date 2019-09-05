@@ -1,14 +1,11 @@
-#include "Parser.h" /* Header File Soon. */
+#include "Parser.h"
+#include "Strings.h"
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
+#include <errno.h>
 
-/* Catastrophic. */
-static const char FILE_FAIL [] = "File failed to open, exiting program.\n";
-
-static const char WRONG_USAGE [] = "Incorrect usage: Parser <fileame>\n";
-
-static const char STDIN_USAGE [] = "Standarad Input mode:\n";
 
 static const int SCREEN_WIDTH = 640;
 static const int SCREEN_HEIGHT = 480;
@@ -16,6 +13,10 @@ static const int BUFF_SIZE = 256;
 
 int main( int argc, char* argv[] )
 {
+  SDL_Event event;
+
+  bool running = false;
+
   Parser * parser;
   /* Filename passed at command line. */
   char * fName;
@@ -28,37 +29,70 @@ int main( int argc, char* argv[] )
 
   SDL_Window* window = NULL;
 
+  SDL_Renderer * renderer = NULL;
+
   SDL_Surface* screenSurface = NULL;
 
-  if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
-  {
-    printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
-  }
-  else
-  {
+  if(SDL_Init(SDL_INIT_VIDEO) < 0){
+    
+    fprintf(stderr,SDL_INIT_FAIL,SDL_GetError());
+  
+  }else{
+
     window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, 
     SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
 
-    if( window == NULL )
-    {
-      printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
-    }
-    else
-    {
+    if( window == NULL ){
+      
+      fprintf(stderr,SDL_WINDOW_FAIL,SDL_GetError());
+    
+    }else{
+
+      renderer = SDL_CreateRenderer(window, -1, 0);
+
       screenSurface = SDL_GetWindowSurface( window );
 
       SDL_FillRect( screenSurface, NULL, 
-      SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
+      SDL_MapRGB( screenSurface->format,0x2F,0x2F,0x2F));
 
       SDL_UpdateWindowSurface( window );
 
-      SDL_Delay( 1000 );
+      SDL_Delay( 10000 );
+
     }
 
+    /* GAME INITIALIZATION ---------------------------------------------------*/
     
-    SDL_DestroyWindow( window );
+    /* Set the running state to true, then enter the poll event loop */
+    running = true;
 
+    /* START GAME LOOP -------------------------------------------------------*/
+    /* -----------------------------------------------------------------------*/
+    while(running){
+
+      while (SDL_PollEvent (&event)) {
+
+      /* Event Types */
+        if(event.type == SDL_QUIT){
+	  running = false;
+        }
+
+      }
+
+    }
+    /* END GAME LOOP ---------------------------------------------------------*/
+    /* -----------------------------------------------------------------------*/
+
+    /* Clean up SDL objects. */
+    SDL_FreeSurface( screenSurface );
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow( window );
     SDL_Quit();
+    
+    renderer = 0;
+    window = 0;
+    screenSurface = 0;
+
   }
 
 
@@ -72,8 +106,6 @@ int main( int argc, char* argv[] )
     fprintf(stdout,STDIN_USAGE);
     fgets(line, BUFF_SIZE, stdin);
 
-    /* Echo. */
-    fprintf(stdout,line);
     return 0;
 
     /* Incorrect usage. */
@@ -84,11 +116,12 @@ int main( int argc, char* argv[] )
   /* Get name from args. */
   fName = argv[1];
 
+  errno = 0;
   /* File Mode. */
-  file = fopen(fName,"r");
+  file = fopen(fName,FILE_PERMISSIONS);
 
   if(!file){
-    fprintf(stderr,FILE_FAIL);
+    fprintf(stderr,FILE_FAIL,fName,strerror(errno));
     return -1;
   }
 
@@ -104,6 +137,8 @@ int main( int argc, char* argv[] )
   /* Close file. */
   if(file != NULL)
     fclose(file);
+
+  file = 0;
 
 
   return 0;

@@ -8,21 +8,14 @@
 #include <string.h>
 
 /* Basic. */
-const char NEW_NODE [] = "%X New node constructed: %s\n";
-
-const char DELETE_NODE [] = "%X Node destructed: %s\n";
-
-const char LIST_MADE [] = "%X List %d constructed\n";
-
-const char PARSER_MADE [] = "%X Parser constructed\n";
-
-const char DELETE_PARSER [] = "%X Parser destructed\n";
-
-const char DELETE_LIST [] = "%X List %d destructed\n";
-
-const char NO_FRONT [] = "%X List %d NULL front pointer\n";
-
-const char OCCUPANCY [] = "Occupancy: %d\n";
+#define NEW_NODE "%p New node constructed.\n"
+#define DELETE_NODE "%p Node destructed.\n"
+#define LIST_MADE "%p List %ld constructed\n"
+#define PARSER_MADE "%p Parser constructed\n"
+#define DELETE_PARSER "%p Parser destructed\n"
+#define DELETE_LIST "%p List %ld destructed\n"
+#define NO_FRONT "%p List %ld NULL front pointer\n"
+#define OCCUPANCY "Occupancy: %ld\n"
 
 static long list_counter = 0;
 
@@ -83,7 +76,7 @@ Node * new_Node (void * data, void * (*copy_func) (void *)) {
 	np->data = copy_func(data);
 	np->pre = np->next = 0;
 
-	fprintf(stderr,NEW_NODE,np,np->data);
+	fprintf(stderr,NEW_NODE,(void*)np);
 
 	return np;
 }
@@ -98,7 +91,7 @@ Node * new_Node (void * data, void * (*copy_func) (void *)) {
    Deallocates all associated memory. */
 
 void delete_Node (List * lp, Node ** np) {
-	fprintf(stderr,DELETE_NODE,*np,(char*)(*np)->data);
+	fprintf(stderr,DELETE_NODE,(void*)*np);
 
 	lp->delete_func(&(*np)->data);	
 	lp->occupancy--;
@@ -136,7 +129,7 @@ void delete_AllNodes(Node * np, List * lp) {
    @return - List * - the List. */
 
 List * new_List (void * (*copy_func)(void *),
-		void (*delete_func)(void *)) {
+		void (*delete_func)(void **)) {
 
 	List * lp = (List*) malloc(sizeof(List));
 	lp->occupancy = 0;
@@ -145,7 +138,7 @@ List * new_List (void * (*copy_func)(void *),
 	lp->delete_func = delete_func;
 	lp->front = 0;
 
-	fprintf(stderr,LIST_MADE,lp,lp->list_count);
+	fprintf(stderr,LIST_MADE,(void*)lp,lp->list_count);
 
 	return lp;
 }
@@ -159,7 +152,7 @@ List * new_List (void * (*copy_func)(void *),
    Deallocates the passed List and all associated data members. */
 
 void delete_List (List ** lpp){
-	fprintf(stderr,DELETE_LIST,*lpp,(*lpp)->list_count);
+	fprintf(stderr,DELETE_LIST,(void*)*lpp,(*lpp)->list_count);
 	list_counter--;
 	delete_AllNodes((*lpp)->front,*lpp);
 	free(*lpp);
@@ -196,7 +189,7 @@ void insert_List(List * lp, void * data){
 
 Node * remove_List (List * lp, void * data){
 	if(!lp->front)
-		fprintf(stderr,NO_FRONT,lp,lp->occupancy);
+		fprintf(stderr,NO_FRONT,(void*)lp,lp->occupancy);
 
 	return 0;
 }
@@ -204,19 +197,19 @@ Node * remove_List (List * lp, void * data){
 /* BOOKMARK ######################################################### strtok */
 
 Parser * new_Parser (void * (*copy_func)(void *),
-		void (*delete_func)(void *)) {
+		void (*delete_func)(void **)) {
 
 	Parser * parser = (Parser*) malloc(sizeof(Parser));
 	parser->lp = new_List(copy_func,delete_func);
 
-	fprintf(stderr,PARSER_MADE,parser);
+	fprintf(stderr,PARSER_MADE,(void*)parser);
 
 	return parser;
 }
 
 void delete_Parser(Parser ** parser){
 	delete_List(&((*parser)->lp));	
-	fprintf(stderr,DELETE_PARSER,*parser);	
+	fprintf(stderr,DELETE_PARSER,(void*)*parser);	
 	free(*parser);
 	*parser=0;
 }
