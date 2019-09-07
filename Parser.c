@@ -2,20 +2,11 @@
 
 #############################################################################*/
 #include "Parser.h"
-
+#include "Strings.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-/* Basic. */
-#define NEW_NODE "%p New node constructed.\n"
-#define DELETE_NODE "%p Node destructed.\n"
-#define LIST_MADE "%p List %ld constructed\n"
-#define PARSER_MADE "%p Parser constructed\n"
-#define DELETE_PARSER "%p Parser destructed\n"
-#define DELETE_LIST "%p List %ld destructed\n"
-#define NO_FRONT "%p List %ld NULL front pointer\n"
-#define OCCUPANCY "Occupancy: %ld\n"
 
 static long list_counter = 0;
 
@@ -28,36 +19,6 @@ void clrbuf (int character) {
 		character = fgetc(stdin);
 	}
 }	
-
-
-/* copy_func
-
-   Implements a copy function for a char * string.
-
-   Generic copy function implementation goes here. This is where void *
-   data types get their behavior.
-
-   @param - void * data
-   @return - void * copy of data */
-
-void * copy_func (void * data){
-	return  (void*) strdup((char*)data);
-}
-
-/* delete_func
-
-   Implements a delete function for a char * string.
-
-   Generic delete function implementation goes here.  This deletes the
-   void * data and handles memory deallocations. 
-
-   @param void * data. */
-
-void delete_func (void ** data) {
-	free((char*)(*data));
-	*data = 0;
-}
-
 
 /* new_Node
 
@@ -108,15 +69,14 @@ void delete_Node (List * lp, Node ** np) {
 
    Recursively deletes all nodes linked to the specified one. */
 
-void delete_AllNodes(Node * np, List * lp) {
-	if(!np)
+void delete_AllNodes(Node ** np, List * lp) {
+	if(!*np)
 		return;
 
-	Node * pre = np->pre;
-	delete_Node(lp,&np);
+	Node * pre = (*np)->pre;
+	delete_Node(lp,np);
 
-	if(pre)
-		delete_AllNodes(pre, lp);
+	delete_AllNodes(&pre, lp);
 }
 
 /* new_List
@@ -154,7 +114,7 @@ List * new_List (void * (*copy_func)(void *),
 void delete_List (List ** lpp){
 	fprintf(stderr,DELETE_LIST,(void*)*lpp,(*lpp)->list_count);
 	list_counter--;
-	delete_AllNodes((*lpp)->front,*lpp);
+	delete_AllNodes(&(*lpp)->front,*lpp);
 	free(*lpp);
 	*lpp=0;
 }
@@ -171,7 +131,7 @@ void delete_List (List ** lpp){
 void insert_List(List * lp, void * data){
 	/* If the list has no front Node, create it. */
 	if(!lp->front){
-		lp->front = new_Node(data,copy_func);
+		lp->front = new_Node(data,lp->copy_func);
 		/* Otherwise, push to the top. */
 	}else{
 		lp->front->next = new_Node(data,lp->copy_func);

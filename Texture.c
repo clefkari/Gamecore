@@ -5,6 +5,9 @@
 #include <dirent.h>
 #include <string.h>
 
+#define TEXTURE_BUFFER 256
+#define NAME_BUFFER 512
+
 /* init_Textures
 
 	Initializes all game textures in the data section of memory to be pointed to
@@ -37,17 +40,28 @@ int initTextures(SDL_Renderer * renderer){
 	}
 
 	while((de = readdir(dr)) != NULL){
+		
+		memset(name, 0, sizeof(name));
+		sprintf(name,TEXTURE_FORMAT,de->d_name);
+		surface = SDL_LoadBMP(name);
 
-		surface = IMG_Load(de->d_name);
-
-		if(!surface){
+		if(!surface){//TODO
 
 			failures++;
-			fprintf(stderr,TEXTURE_FAIL,de->d_dname);
+			fprintf(stderr,SURFACE_FAIL,name);
 		
 		}else{
-			texture.texture = 
-			insert_List(textureList,(void*)texture);
+
+			texture.texture = SDL_CreateTextureFromSurface(renderer,surface);
+			if(!texture.texture){
+
+				failures++;
+				fprintf(stderr,TEXTURE_FAIL,de->d_name);
+			}else{
+				texture.name = de->d_name;
+				insert_List(textureList,(void*)&texture);
+
+			}
 
 		}
 
@@ -76,16 +90,25 @@ void * copyTexture(void * data){
 
 	Texture * tp = (Texture *) malloc(sizeof(Texture));
 	tp->texture = ((Texture *)data)->texture;
+
 	tp->name = strdup(((Texture*)data)->name);
+	
+	fprintf(stderr,NEW_TEXTURE,(void*)tp,tp->name);
 
 	return (void *) tp;
 }
 
 void deleteTexture(void ** data){
+	
+	fprintf(stderr,DELETE_TEXTURE,*data,((Texture*)(*data))->name);
 
 	SDL_DestroyTexture( ( (Texture*) (*data) )->texture );
-	free( ( (Texture*) (*data) )->name );
 	((Texture*)(*data))->texture = 0;
+	
+	free( ( (Texture*) (*data) )->name ); //TODO
 	((Texture*)(*data))->name = 0;
+	
+	free(*data);
+	*data = 0;
 
 }

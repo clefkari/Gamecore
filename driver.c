@@ -1,3 +1,4 @@
+#include "Texture.h"
 #include "Parser.h"
 #include "Strings.h"
 
@@ -11,135 +12,68 @@ static const int SCREEN_WIDTH = 640;
 static const int SCREEN_HEIGHT = 480;
 static const int BUFF_SIZE = 256;
 
-int main( int argc, char* argv[] )
-{
-  SDL_Event event;
+int main(int argc, char* argv[]){
+        SDL_Window *window;
+        SDL_Renderer *renderer;
+        SDL_Texture *texture;
+        SDL_Event event;
+        SDL_Rect r;
 
-  bool running = false;
-
-  Parser * parser;
-  /* Filename passed at command line. */
-  char * fName;
-
-  /* File pointer. */
-  FILE * file;
-
-  /* Iterator. */
-  int i;
-
-  SDL_Window* window = NULL;
-
-  SDL_Renderer * renderer = NULL;
-
-  SDL_Surface* screenSurface = NULL;
-
-  if(SDL_Init(SDL_INIT_VIDEO) < 0){
-    
-    fprintf(stderr,SDL_INIT_FAIL,SDL_GetError());
-  
-  }else{
-
-    window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, 
-    SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-
-    if( window == NULL ){
-      
-      fprintf(stderr,SDL_WINDOW_FAIL,SDL_GetError());
-    
-    }else{
-
-      renderer = SDL_CreateRenderer(window, -1, 0);
-
-      screenSurface = SDL_GetWindowSurface( window );
-
-      SDL_FillRect( screenSurface, NULL, 
-      SDL_MapRGB( screenSurface->format,0x2F,0x2F,0x2F));
-
-      SDL_UpdateWindowSurface( window );
-
-      SDL_Delay( 10000 );
-
-    }
-
-    /* GAME INITIALIZATION ---------------------------------------------------*/
-    
-    /* Set the running state to true, then enter the poll event loop */
-    running = true;
-
-    /* START GAME LOOP -------------------------------------------------------*/
-    /* -----------------------------------------------------------------------*/
-    while(running){
-
-      while (SDL_PollEvent (&event)) {
-
-      /* Event Types */
-        if(event.type == SDL_QUIT){
-	  running = false;
+        if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+                SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't initialize SDL: %s", SDL_GetError());
+                return 3;
         }
 
-      }
+        window = SDL_CreateWindow("SDL_CreateTexture",
+                        SDL_WINDOWPOS_UNDEFINED,
+                        SDL_WINDOWPOS_UNDEFINED,
+                        SCREEN_WIDTH, SCREEN_HEIGHT,
+                        SDL_WINDOW_RESIZABLE);
 
-    }
-    /* END GAME LOOP ---------------------------------------------------------*/
-    /* -----------------------------------------------------------------------*/
+        r.w = 100;
+        r.h = 50;
 
-    /* Clean up SDL objects. */
-    SDL_FreeSurface( screenSurface );
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow( window );
-    SDL_Quit();
-    
-    renderer = 0;
-    window = 0;
-    screenSurface = 0;
+        renderer = SDL_CreateRenderer(window, -1, 0);
 
-  }
+        texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 
+	SCREEN_WIDTH, SCREEN_HEIGHT);
 
+	/* Me */
+	
+	initTextures(renderer);
 
+	/* End Me */
+        
+	while (1) {
+                SDL_PollEvent(&event);
+                if(event.type == SDL_QUIT)
+                        break;
+                r.x=rand()%500;
+                r.y=rand()%500;
 
-  /* Line buffer, to be processed, initialized null. */
-  char line [BUFF_SIZE]; i = 0;
-  while(i < BUFF_SIZE) { line[i] = '\0'; i++; }	
+                SDL_SetRenderTarget(renderer, texture);
+                SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
+                SDL_RenderClear(renderer);
+                SDL_RenderDrawRect(renderer,&r);
+                SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0x00);
+                SDL_RenderFillRect(renderer, &r);
+                SDL_SetRenderTarget(renderer, NULL);
+                SDL_RenderCopy(renderer, texture, NULL, NULL);
+                SDL_RenderPresent(renderer);
+		
+		/* Me
 
-  /* Make sure we recieve a filename. */
-  if(argc == 1){
-    fprintf(stdout,STDIN_USAGE);
-    fgets(line, BUFF_SIZE, stdin);
-
-    return 0;
-
-    /* Incorrect usage. */
-  }else if(argc > 2){
-    fprintf(stdout,WRONG_USAGE);
-  }
-
-  /* Get name from args. */
-  fName = argv[1];
-
-  errno = 0;
-  /* File Mode. */
-  file = fopen(fName,FILE_PERMISSIONS);
-
-  if(!file){
-    fprintf(stderr,FILE_FAIL,fName,strerror(errno));
-    return -1;
-  }
-
-  /* Handle a good file -----------------------------------------------*/
-  parser = new_Parser(copy_func,delete_func);	
-
-  while(fgets(line, BUFF_SIZE, file) != NULL){
-    insert_List(parser->lp,line);
-  }
-
-  delete_Parser(&parser);
-
-  /* Close file. */
-  if(file != NULL)
-    fclose(file);
-
-  file = 0;
+		*/
 
 
-  return 0;
+		/* End Me
+
+		*/
+        }
+	delete_List(&textureList);
+        SDL_DestroyRenderer(renderer);
+        SDL_Quit();
+
+
+	return 0;
 }

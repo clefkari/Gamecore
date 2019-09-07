@@ -37,7 +37,7 @@ void delete_func (void ** data);
 
 Node * new_Node (void * data, void * (*copy_func) (void *));
 void delete_Node (List * lp, Node ** np);
-void delete_AllNodes(Node * np, List * lp);
+void delete_AllNodes(Node ** np, List * lp);
 
 /* List   ------------------------------------------------------------ */
 
