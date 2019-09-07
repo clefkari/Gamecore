@@ -89,13 +89,15 @@ void delete_AllNodes(Node ** np, List * lp) {
    @return - List * - the List. */
 
 List * new_List (void * (*copy_func)(void *),
-		void (*delete_func)(void **)) {
+		void (*delete_func)(void **),
+		int (*equals_func)(void*,void*)) {
 
 	List * lp = (List*) malloc(sizeof(List));
 	lp->occupancy = 0;
 	lp->list_count = ++list_counter;
 	lp->copy_func = copy_func;
 	lp->delete_func = delete_func;
+	lp->equals_func = equals_func;
 	lp->front = 0;
 
 	fprintf(stderr,LIST_MADE,(void*)lp,lp->list_count);
@@ -154,13 +156,56 @@ Node * remove_List (List * lp, void * data){
 	return 0;
 }
 
+
+/* lookup_Node
+
+*/
+
+Node * lookup_Node (Node * np, void * data,
+int (*equals_func)(void*,void*)){
+	
+	if(equals_func(data,np->data)){
+
+		return np;
+	
+	}
+	
+	if(!np->pre){
+	
+		return NULL;
+	
+	}
+
+	return lookup_Node (np->pre,data,equals_func);	
+}
+
+/* lookup_List
+
+*/
+
+
+Node * lookup_List (List * lp, void * data){
+
+	if(!lp->front){
+		fprintf(stderr,NO_FRONT,(void*)lp,lp->occupancy);
+
+	return NULL;
+
+	}
+
+	Node * np = lookup_Node(lp->front,data,lp->equals_func);
+
+	return np;
+}
+
+
 /* BOOKMARK ######################################################### strtok */
 
 Parser * new_Parser (void * (*copy_func)(void *),
 		void (*delete_func)(void **)) {
 
 	Parser * parser = (Parser*) malloc(sizeof(Parser));
-	parser->lp = new_List(copy_func,delete_func);
+	parser->lp = new_List(copy_func,delete_func,0);
 
 	fprintf(stderr,PARSER_MADE,(void*)parser);
 

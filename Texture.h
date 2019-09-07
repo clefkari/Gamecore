@@ -15,3 +15,5 @@ List * textureList;
 int initTextures(SDL_Renderer * renderer);
 void * copyTexture(void * data);
 void deleteTexture(void ** data);
+int equalsTexture(void * lhs, void * rhs);
+SDL_Texture * getTexture(char * name);

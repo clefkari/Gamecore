@@ -25,7 +25,7 @@ int initTextures(SDL_Renderer * renderer){
 	SDL_Surface * surface = NULL;
 
 	/* Initialize a Texture List with the correct copy/delete functions. */
-	textureList = new_List(&copyTexture,&deleteTexture);
+	textureList = new_List(&copyTexture,&deleteTexture,&equalsTexture);
 	
 	int failures = 0;
 	int counter = 0;
@@ -110,5 +110,27 @@ void deleteTexture(void ** data){
 	
 	free(*data);
 	*data = 0;
+
+}
+
+int equalsTexture(void * lhs, void * rhs){
+
+	Texture * tlhs = (Texture *)lhs;
+	Texture * trhs = (Texture *)rhs;
+
+	return !strcmp(tlhs->name,trhs->name);
+	
+}
+
+SDL_Texture * getTexture(char * name){
+
+	Texture texture = {.texture = NULL, .name = name};
+
+	Node * np = lookup_List(textureList,&texture);
+
+	if(np)
+		return ((Texture*)(np->data))->texture;
+	else
+		return NULL;
 
 }

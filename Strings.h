@@ -14,7 +14,6 @@
 
 /* File */
 #define TEXTURE_FORMAT "./Textures/%s"
-#define TEXTURE_PATH "Textures/textures.txt"
 #define TEXTURE_DIR "./Textures"
 #define FILE_PERMISSIONS "r"
 

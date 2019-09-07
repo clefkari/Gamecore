@@ -8,8 +8,8 @@
 #include <errno.h>
 
 
-static const int SCREEN_WIDTH = 640;
-static const int SCREEN_HEIGHT = 480;
+static const int SCREEN_WIDTH = 1200;
+static const int SCREEN_HEIGHT = 800;
 static const int BUFF_SIZE = 256;
 
 int main(int argc, char* argv[]){
@@ -17,7 +17,7 @@ int main(int argc, char* argv[]){
         SDL_Renderer *renderer;
         SDL_Texture *texture;
         SDL_Event event;
-        SDL_Rect r;
+        SDL_Rect d;
 
         if (SDL_Init(SDL_INIT_VIDEO) < 0) {
                 SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't initialize SDL: %s", SDL_GetError());
@@ -30,36 +30,36 @@ int main(int argc, char* argv[]){
                         SCREEN_WIDTH, SCREEN_HEIGHT,
                         SDL_WINDOW_RESIZABLE);
 
-        r.w = 100;
-        r.h = 50;
+        d.x = SCREEN_WIDTH / 2;
+        d.y = SCREEN_HEIGHT / 2;
 
         renderer = SDL_CreateRenderer(window, -1, 0);
-
-        texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, 
-	SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	/* Me */
 	
 	initTextures(renderer);
+	
+	texture = getTexture("rock.bmp");
 
 	/* End Me */
         
 	while (1) {
-                SDL_PollEvent(&event);
-                if(event.type == SDL_QUIT)
-                        break;
-                r.x=rand()%500;
-                r.y=rand()%500;
 
-                SDL_SetRenderTarget(renderer, texture);
-                SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
-                SDL_RenderClear(renderer);
-                SDL_RenderDrawRect(renderer,&r);
-                SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0x00);
-                SDL_RenderFillRect(renderer, &r);
-                SDL_SetRenderTarget(renderer, NULL);
-                SDL_RenderCopy(renderer, texture, NULL, NULL);
+
+                d.x= rand()%500;
+		d.y= rand()%500;
+                d.w= rand()%500;
+                d.h= rand()%500;
+
+                SDL_RenderCopy(renderer, texture, NULL, &d);
                 SDL_RenderPresent(renderer);
+		SDL_Delay(100);
+
+		SDL_PollEvent(&event);
+
+		if(event.type == SDL_QUIT)
+			break;
+
 		
 		/* Me
 
@@ -69,7 +69,9 @@ int main(int argc, char* argv[]){
 		/* End Me
 
 		*/
+
         }
+
 	delete_List(&textureList);
         SDL_DestroyRenderer(renderer);
         SDL_Quit();
