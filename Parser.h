@@ -30,9 +30,6 @@ typedef struct{
 	List * lp;	
 }Parser;
 
-void * copy_func (void * data);
-void delete_func (void ** data);
-
 /* Node   ------------------------------------------------------------ */
 
 Node * new_Node (void * data, void * (*copy_func) (void *));
