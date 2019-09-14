@@ -1,0 +1,12 @@
+.gitignore
+*.sw*
+*.o
+*.s
+*.txt
+*.dump
+REF/
+driver
+*~
+*.exe
+cs12xex/
+_Makefile
