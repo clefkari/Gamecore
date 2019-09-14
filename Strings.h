@@ -1,3 +1,6 @@
+#ifndef STRINGS_H
+#define STRINGS_H
+
 /* Basic. */
 
 #define NEW_TEXTURE "%p Texture constructed: %s.\n"
@@ -26,3 +29,5 @@
 #define STDIN_USAGE "Standarad Input mode:\n"
 #define SDL_INIT_FAIL "SDL could not initialize! SDL_Error: %s\n"
 #define SDL_WINDOW_FAIL "Window could not be created! SDL_Error: %s\n"
+
+#endif

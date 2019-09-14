@@ -1,11 +1,13 @@
-#ifndef PARSER_H
-#define PARSER_H
 /*			PARSER			clefkari@ucsd.edu
 
 #############################################################################*/
 
-#include <stdio.h>
+#ifndef PARSER_H
+#define PARSER_H
+
+#include "Strings.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 typedef enum { false, true } bool;

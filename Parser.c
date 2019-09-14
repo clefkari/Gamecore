@@ -1,12 +1,8 @@
 /*			PARSER			clefkari@ucsd.edu
 
 #############################################################################*/
-#include "Parser.h"
-#include "Strings.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
+#include "Parser.h"
 
 static long list_counter = 0;
 
@@ -89,8 +85,8 @@ void delete_AllNodes(Node ** np, List * lp) {
    @return - List * - the List. */
 
 List * new_List (void * (*copy_func)(void *),
-		void (*delete_func)(void **),
-		int (*equals_func)(void*,void*)) {
+void (*delete_func)(void **),
+int (*equals_func)(void*,void*)) {
 
 	List * lp = (List*) malloc(sizeof(List));
 	lp->occupancy = 0;
