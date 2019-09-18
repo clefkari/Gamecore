@@ -1,3 +1,7 @@
+/*			GAMECORE			clefkari@ucsd.edu
+
+#############################################################################*/
+
 #ifndef GAMECORE_H
 #define GAMECORE_H
 

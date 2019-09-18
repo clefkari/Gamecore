@@ -1,3 +1,7 @@
+/*			STRINGS			clefkari@ucsd.edu
+
+#############################################################################*/
+
 #ifndef STRINGS_H
 #define STRINGS_H
 
