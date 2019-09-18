@@ -77,7 +77,7 @@ int run(){
 
 			if(event.type == SDL_KEYDOWN){
 				if(event.key.keysym.sym == SDLK_BACKQUOTE){
-					fgetc(stdin);
+					fgetc(stdin);//TODO - insert console commands here.
 				}
 
 			}
@@ -85,7 +85,7 @@ int run(){
 		}
 
 		SDL_RenderClear(renderer);
-		SDL_RenderCopy(renderer, texture, NULL, &d);
+		/* SDL_RenderCopy(renderer, texture, NULL, &d); */
 		SDL_RenderPresent(renderer);
 		SDL_Delay(500);
 
