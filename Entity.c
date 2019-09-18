@@ -1,3 +1,7 @@
+/*			ENTITY				clefkari@ucsd.edu
+
+#############################################################################*/
+
 #include "Entity.h"
 
 /* We create a new entity by using a stack entity which will recieve the input

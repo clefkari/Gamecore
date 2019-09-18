@@ -1,3 +1,7 @@
+/*			ENTITY				clefkari@ucsd.edu
+
+#############################################################################*/
+
 #ifndef ENTITY_H
 #define ENTITY_H
 
