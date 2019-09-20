@@ -49,4 +49,6 @@
 #define DELIM " "
 #define DECIMAL 10
 
+#define PROMPT ">>> "
+
 #endif

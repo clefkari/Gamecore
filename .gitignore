@@ -2,6 +2,7 @@
 *.sw*
 *.o
 *.s
+*.txt
 *.dump
 REF/
 driver

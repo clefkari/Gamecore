@@ -74,62 +74,104 @@ int parseEntity(char * cmd){
   char * ch, * endptr;
 
   errno = 0;
+	
+	/* */
+
   ch = strtok(cmd,DELIM);
 
-  /* Cancel when nothing is entered. */
+  if(errno){
+    fprintf(stderr,ENTITY_FAIL,strerror(errno));
+    return -1;
+	}
+
   if(!ch){
     return -1;
   }
 
-  if(errno){
-    fprintf(stderr,ENTITY_FAIL,strerror(errno));
-    return -1;  
-  }
-
   entity.x = strtol(ch,&endptr,DECIMAL);
+
   if(ch == endptr){
-    fprintf(stderr,ENTITY_FAIL,strerror(errno));
     return -1;  
   }
 
+	/* */
+
+	/* */
+
   ch = strtok(NULL,DELIM);
+
   if(errno){
     fprintf(stderr,ENTITY_FAIL,strerror(errno));
-    return -1;  
+    return -1;
+	}
+
+  if(!ch){
+    return -1;
   }
+
   entity.y = strtol(ch,&endptr,DECIMAL);
+
   if(ch == endptr){
-    fprintf(stderr,ENTITY_FAIL,strerror(errno));
     return -1;  
   }
 
+	/* */
+	
+	/* */
+
   ch = strtok(NULL,DELIM);
+
   if(errno){
     fprintf(stderr,ENTITY_FAIL,strerror(errno));
-    return -1;  
+    return -1;
+	}
+
+  if(!ch){
+    return -1;
   }
+
   entity.w = strtol(ch,&endptr,DECIMAL);
+
   if(ch == endptr){
-    fprintf(stderr,ENTITY_FAIL,strerror(errno));
     return -1;  
   }
 
+	/* */
+	
+	/* */
+
   ch = strtok(NULL,DELIM);
+
   if(errno){
     fprintf(stderr,ENTITY_FAIL,strerror(errno));
-    return -1;  
+    return -1;
+	}
+
+  if(!ch){
+    return -1;
   }
+
   entity.h = strtol(ch,&endptr,DECIMAL);
+
   if(ch == endptr){
-    fprintf(stderr,ENTITY_FAIL,strerror(errno));
     return -1;  
   }
 
+	/* */
+	
+	/* */
+
   ch = strtok(NULL,DELIM);
+
   if(errno){
     fprintf(stderr,ENTITY_FAIL,strerror(errno));
-    return -1;  
+    return -1;
+	}
+
+  if(!ch){
+    return -1;
   }
+
   entity.texture = getTexture(ch);
   if(!entity.texture){
     return -1;  

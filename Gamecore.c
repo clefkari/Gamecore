@@ -7,7 +7,6 @@
 int run(){
   SDL_Window *window;
   SDL_Renderer *renderer;
-  SDL_Texture *texture;
   SDL_Event event;
   SDL_Rect d;
 
@@ -59,7 +58,8 @@ int run(){
         /* Parse a Console Command */
 
         if(event.key.keysym.sym == SDLK_BACKQUOTE){
-
+					
+					fprintf(stdout,PROMPT);
           fgets(buffer,BUFFER_SIZE,stdin);
           ch = strchr(buffer,NEWLINE);
 
