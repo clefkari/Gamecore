@@ -14,9 +14,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#define TEXTURE_BUFFER 256
-#define NAME_BUFFER 512
-
 /* Global list of all textures. */
 List * textureList;
 

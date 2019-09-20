@@ -8,6 +8,8 @@
 #include "Strings.h"
 #include "Parser.h"
 #include "Texture.h"
+#include <errno.h>
+#include <stdio.h>
 
 /* Global list of all entities in the game. */
 List * entityList;
@@ -26,12 +28,14 @@ List * entityList;
 
 typedef struct{
 SDL_Texture * texture;
-int x, y, w, h;
+long x, y, w, h;
 unsigned long id;
 }Entity;
 
 void * newEntity(void * stackEntity);
 void deleteEntity(void ** epp);
 int equalsEntity(void * lhs, void * rhs);
+int initEntity();
+int parseEntity(char * cmd);
 
 #endif

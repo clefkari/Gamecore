@@ -123,9 +123,11 @@ SDL_Texture * getTexture(char * name){
 
 	Node * np = lookup_List(textureList,&texture);
 
-	if(np)
+	if(np){
 		return ((Texture*)(np->data))->texture;
-	else
+  }else{
+    fprintf(stderr,GET_TEXTURE_FAIL,name);
 		return NULL;
+  }
 
 }

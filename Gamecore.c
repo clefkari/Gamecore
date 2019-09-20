@@ -11,14 +11,19 @@ int run(){
 	SDL_Event event;
 	SDL_Rect d;
 
-	int running = 1;
+  Node * np;
+  
+  char buffer [BUFFER_SIZE] = { 0 };
+	char * ch;
+
+  int running = 1;
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't initialize SDL: %s", SDL_GetError());
 		return 3;
 	}
 
-	window = SDL_CreateWindow("SDL_CreateTexture",
+	window = SDL_CreateWindow("Gamecore",
 			SDL_WINDOWPOS_UNDEFINED,
 			SDL_WINDOWPOS_UNDEFINED,
 			SCREEN_WIDTH, SCREEN_HEIGHT,
@@ -27,10 +32,11 @@ int run(){
 
 	renderer = SDL_CreateRenderer(window, -1, 0);
 
-	/* Me */
-
+  /* Global Data List Initialization. */
 	initTextures(renderer);
-	texture = getTexture("water.bmp");
+  initEntity();
+
+	/* texture = getTexture("water.bmp"); */
 
 	/* End Me */
 
@@ -84,8 +90,14 @@ int run(){
 
 				if(event.key.keysym.sym == SDLK_BACKQUOTE){
 
-					fgetc(stdin);//TODO - insert console commands here.
-				
+					fgets(buffer,BUFFER_SIZE,stdin);//TODO - insert console commands here.
+          ch = strchr(buffer,NEWLINE);
+          
+          if(ch){
+            *ch = 0;
+				    parseEntity(buffer);
+          }
+
 				}
 
 			}
@@ -93,22 +105,40 @@ int run(){
 		}
 
 		SDL_RenderClear(renderer);
-		/* SDL_RenderCopy(renderer, texture, NULL, &d); */
-		SDL_RenderPresent(renderer);
-		SDL_Delay(500);
+		
+    /* Boiler Plate */
 
-		/* Me
+    np = entityList->front;
+    if(np){
 
-		 */
+      while(np){
 
+        d.x = ((Entity*)(np->data))->x;
+        d.y = ((Entity*)(np->data))->y;
+        d.h = ((Entity*)(np->data))->h;
+        d.w = ((Entity*)(np->data))->w;
 
-		/* End Me
+        SDL_RenderCopy(renderer, ((Entity*)(np->data))->texture, 
+            NULL, &d);
+        
+        np = np->pre;
 
-		 */
+      }
+
+    }
+
+    /* End Boiler Plate */
+
+    SDL_RenderPresent(renderer);
 
 	}
 
+
+  /* Global Data List Deallocation. */
 	delete_List(&textureList);
+  delete_List(&entityList);
+
+  /* SDL Clean up. */
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
 

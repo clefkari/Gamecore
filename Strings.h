@@ -6,7 +6,6 @@
 #define STRINGS_H
 
 /* Basic. */
-
 #define NEW_ENTITY "%p Entity constructed: %lu.\n"
 #define DELETE_ENTITY "%p Entity destructed: %lu.\n"
 #define NEW_TEXTURE "%p Texture constructed: %s.\n"
@@ -22,6 +21,7 @@
 #define OCCUPANCY "Occupancy: %ld\n"
 
 /* File */
+#define ENTITY_FAIL "Entity failure: %s.\n"
 #define ENTITY_PATH "./Entity/Entity.txt"
 #define TEXTURE_FORMAT "./Textures/%s"
 #define TEXTURE_DIR "./Textures"
@@ -29,6 +29,7 @@
 
 /* Catastrophic. */
 #define SURFACE_FAIL "Surface %s failed to load.\n"
+#define GET_TEXTURE_FAIL "Get Texture %s failed.\n"
 #define TEXTURE_FAIL "Texture %s failed to load.\n"
 #define DIR_FAIL "Directory %s failed to open: %s.\n"
 #define FILE_FAIL "File %s failed to open: %s.\n"
@@ -36,5 +37,16 @@
 #define STDIN_USAGE "Standarad Input mode:\n"
 #define SDL_INIT_FAIL "SDL could not initialize! SDL_Error: %s\n"
 #define SDL_WINDOW_FAIL "Window could not be created! SDL_Error: %s\n"
+
+#define TEXTURE_BUFFER 256
+#define NAME_BUFFER 512
+#define BUFFER_SIZE 256
+
+#define SCREEN_WIDTH 1200
+#define SCREEN_HEIGHT 800
+
+#define NEWLINE '\n'
+#define DELIM " "
+#define DECIMAL 10
 
 #endif
