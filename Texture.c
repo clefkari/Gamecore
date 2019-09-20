@@ -24,7 +24,6 @@ int initTextures(SDL_Renderer * renderer){
 	textureList = new_List(&copyTexture,&deleteTexture,&equalsTexture);
 
 	int failures = 0;
-	int counter = 0;
 	errno = 0;
 
 	struct dirent * de;
@@ -85,8 +84,8 @@ int initTextures(SDL_Renderer * renderer){
 void * copyTexture(void * data){
 
 	Texture * tp = (Texture *) malloc(sizeof(Texture));
-	tp->texture = ((Texture *)data)->texture;
 
+	tp->texture = ((Texture *)data)->texture;
 	tp->name = strdup(((Texture*)data)->name);
 
 	fprintf(stderr,NEW_TEXTURE,(void*)tp,tp->name);

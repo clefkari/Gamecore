@@ -6,6 +6,7 @@
 #define GAMECORE_H
 
 #include "Strings.h"
+#include "Entity.h"
 #include "Texture.h"
 #include "Parser.h"
 

@@ -11,6 +11,8 @@ int run(){
 	SDL_Event event;
 	SDL_Rect d;
 
+	int running = 1;
+
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't initialize SDL: %s", SDL_GetError());
 		return 3;
@@ -32,7 +34,7 @@ int run(){
 
 	/* End Me */
 
-	while (1) {
+	while (running) {
 
 		/* Random Texture Test -
 			 switch(rand()%5){
@@ -72,16 +74,18 @@ int run(){
 
 			if(event.type == SDL_QUIT){
 
-				delete_List(&textureList);
-				SDL_DestroyRenderer(renderer);
-				SDL_Quit();
-				return 0;
+				running = 0;
 
 			}
+			
+			/* Key Down Events */
 
 			if(event.type == SDL_KEYDOWN){
+
 				if(event.key.keysym.sym == SDLK_BACKQUOTE){
+
 					fgetc(stdin);//TODO - insert console commands here.
+				
 				}
 
 			}

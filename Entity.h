@@ -5,10 +5,11 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "Parser.h"
 #include "Strings.h"
+#include "Parser.h"
 #include "Texture.h"
 
+/* Global list of all entities in the game. */
 List * entityList;
 
 /* struct Entity
@@ -26,10 +27,11 @@ List * entityList;
 typedef struct{
 SDL_Texture * texture;
 int x, y, w, h;
+unsigned long id;
 }Entity;
 
-
-Entity * newEntity(Entity * stackEntity);
-void deleteEntity(Entity ** epp);
+void * newEntity(void * stackEntity);
+void deleteEntity(void ** epp);
+int equalsEntity(void * lhs, void * rhs);
 
 #endif

@@ -7,6 +7,8 @@
 
 /* Basic. */
 
+#define NEW_ENTITY "%p Entity constructed: %lu.\n"
+#define DELETE_ENTITY "%p Entity destructed: %lu.\n"
 #define NEW_TEXTURE "%p Texture constructed: %s.\n"
 #define DELETE_TEXTURE "%p Texture destructed: %s.\n"
 
@@ -20,6 +22,7 @@
 #define OCCUPANCY "Occupancy: %ld\n"
 
 /* File */
+#define ENTITY_PATH "./Entity/Entity.txt"
 #define TEXTURE_FORMAT "./Textures/%s"
 #define TEXTURE_DIR "./Textures"
 #define FILE_PERMISSIONS "r"

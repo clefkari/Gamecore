@@ -4,20 +4,26 @@
 
 #include "Entity.h"
 
+static unsigned int entityCounter = 0;
+
 /* We create a new entity by using a stack entity which will recieve the input
 from user or file. */
 
-Entity * newEntity(Entity * stackEntity){
+void * copyEntity(void * data){
 
 	Entity * ep = (Entity*)malloc(sizeof(Entity));
 
-	ep->texture = stackEntity->texture;
-	ep->x = stackEntity->x;
-	ep->y = stackEntity->y;
-	ep->w = stackEntity->w;
-	ep->h = stackEntity->h;
+	ep->texture = ((Entity*)data)->texture;
+	ep->x = ((Entity*)data)->x;
+	ep->y = ((Entity*)data)->y;
+	ep->w = ((Entity*)data)->w;
+	ep->h = ((Entity*)data)->h;
 
-	return ep;
+	ep->id = entityCounter++;
+	
+	fprintf(stderr,NEW_ENTITY,(void*)ep,((Entity*)data)->id);
+
+	return (void*) ep;
 
 }
 
@@ -25,9 +31,28 @@ Entity * newEntity(Entity * stackEntity){
 
 */
 
-void deleteEntity(Entity ** epp){
+void deleteEntity(void ** data){
 
-	free(*epp);
-	*epp=0;
+	fprintf(stderr,DELETE_ENTITY,*data,((Entity*)*data)->id);
+	
+	free(*data);
+	*data=0;
+
+}
+
+/* equalsEntity
+
+*/
+
+int equalsEntity(void * lhs, void * rhs){
+
+	Entity * elhs = (Entity *)lhs;
+	Entity * erhs = (Entity *)rhs;
+
+	return (elhs->id == erhs->id);
+
+}
+
+int initEntity(){
 
 }
