@@ -18,10 +18,11 @@ void * copyEntity(void * data){
   ep->y = ((Entity*)data)->y;
   ep->w = ((Entity*)data)->w;
   ep->h = ((Entity*)data)->h;
+  ep->comp = ((Entity*)data)->comp;
 
   ep->id = entityCounter++;
 
-  fprintf(stderr,NEW_ENTITY,(void*)ep,((Entity*)data)->id);
+  fprintf(stderr,NEW_ENTITY,(void*)ep,ep->id,ep->comp);
 
   return (void*) ep;
 
@@ -65,17 +66,27 @@ int initEntity(){
 
 }
 
+/* parseEntity
+ *
+ * Parses a string and tokenizes it to use as data for members of a stack
+ * Entity.  If all is successful a list insertion will be made.
+ *
+ * @params - cmd - the string to tokenize.
+ * @return - int - success/fail 0/-1 */
+
 int parseEntity(char * cmd){
 
   /* Stack Struct to store input. */
   Entity entity = { 0 };
-
+  
   /* For processing the command. */
   char * ch, * endptr;
 
   errno = 0;
 	
-	/* */
+	/* Tokenize */
+
+  /* X COORDINATE */
 
   ch = strtok(cmd,DELIM);
 
@@ -96,7 +107,7 @@ int parseEntity(char * cmd){
 
 	/* */
 
-	/* */
+	/* Y COORDINATE */
 
   ch = strtok(NULL,DELIM);
 
@@ -117,7 +128,7 @@ int parseEntity(char * cmd){
 
 	/* */
 	
-	/* */
+	/* Width */
 
   ch = strtok(NULL,DELIM);
 
@@ -138,7 +149,7 @@ int parseEntity(char * cmd){
 
 	/* */
 	
-	/* */
+	/* Height */
 
   ch = strtok(NULL,DELIM);
 
@@ -159,7 +170,7 @@ int parseEntity(char * cmd){
 
 	/* */
 	
-	/* */
+	/* Texture */
 
   ch = strtok(NULL,DELIM);
 
@@ -174,6 +185,26 @@ int parseEntity(char * cmd){
 
   entity.texture = getTexture(ch);
   if(!entity.texture){
+    return -1;  
+  }
+  
+  /* */
+
+  /* Components */
+
+  ch = strtok(NULL,DELIM);
+
+  if(errno){
+    fprintf(stderr,ENTITY_FAIL,strerror(errno));
+    return -1;
+	}
+
+  if(!ch){
+    return -1;
+  }
+
+  entity.comp = strtoul(ch,&endptr,0);
+  if(ch == endptr){
     return -1;  
   }
 

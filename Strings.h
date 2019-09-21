@@ -6,7 +6,7 @@
 #define STRINGS_H
 
 /* Basic. */
-#define NEW_ENTITY "%p Entity constructed: %lu.\n"
+#define NEW_ENTITY "%p Entity constructed: ID %lu, components: 0x%lX.\n"
 #define DELETE_ENTITY "%p Entity destructed: %lu.\n"
 #define NEW_TEXTURE "%p Texture constructed: %s.\n"
 #define DELETE_TEXTURE "%p Texture destructed: %s.\n"
