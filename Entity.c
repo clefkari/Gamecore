@@ -58,7 +58,7 @@ int equalsEntity(void * lhs, void * rhs){
  *
  */
 
-int initEntity(){
+int initEntity(int argc, char * argv[]){
 
   entityList = new_List(copyEntity,deleteEntity,equalsEntity);
 

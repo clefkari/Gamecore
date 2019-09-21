@@ -4,7 +4,7 @@
 
 #include "Gamecore.h"
 
-int run(){
+int run(int argc, char * argv[]){
   SDL_Window *window;
   SDL_Renderer *renderer;
   SDL_Event event;
@@ -33,7 +33,7 @@ int run(){
 
   /* Global Data List Initialization. */
   initTextures(renderer);
-  initEntity();
+  initEntity(argc,argv);
 
   /* texture = getTexture("water.bmp"); */
 

@@ -14,6 +14,6 @@
 #include <stdio.h>
 #include <errno.h>
 
-int run();
+int run(int argc, char * argv[]);
 
 #endif

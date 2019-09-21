@@ -6,6 +6,6 @@
 
 int main(int argc, char* argv[]){
 
-	return run();
+	return run(argc,argv);
 
 }

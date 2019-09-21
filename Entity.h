@@ -47,7 +47,7 @@ typedef struct{
 void * newEntity(void * stackEntity);
 void deleteEntity(void ** epp);
 int equalsEntity(void * lhs, void * rhs);
-int initEntity();
+int initEntity(int argc, char * argv[]);
 int parseEntity(char * cmd);
 
 #endif
