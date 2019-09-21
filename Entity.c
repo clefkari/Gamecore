@@ -60,7 +60,7 @@ int equalsEntity(void * lhs, void * rhs){
 
 int initEntity(int argc, char * argv[]){
 
-  entityList = new_List(copyEntity,deleteEntity,equalsEntity);
+  entityList = newList(copyEntity,deleteEntity,equalsEntity);
 
   return 0;
 
@@ -78,13 +78,13 @@ int parseEntity(char * cmd){
 
   /* Stack Struct to store input. */
   Entity entity = { 0 };
-  
+
   /* For processing the command. */
   char * ch, * endptr;
 
   errno = 0;
-	
-	/* Tokenize */
+
+  /* Tokenize */
 
   /* X COORDINATE */
 
@@ -93,7 +93,7 @@ int parseEntity(char * cmd){
   if(errno){
     fprintf(stderr,ENTITY_FAIL,strerror(errno));
     return -1;
-	}
+  }
 
   if(!ch){
     return -1;
@@ -105,16 +105,16 @@ int parseEntity(char * cmd){
     return -1;  
   }
 
-	/* */
+  /* */
 
-	/* Y COORDINATE */
+  /* Y COORDINATE */
 
   ch = strtok(NULL,DELIM);
 
   if(errno){
     fprintf(stderr,ENTITY_FAIL,strerror(errno));
     return -1;
-	}
+  }
 
   if(!ch){
     return -1;
@@ -126,16 +126,16 @@ int parseEntity(char * cmd){
     return -1;  
   }
 
-	/* */
-	
-	/* Width */
+  /* */
+
+  /* Width */
 
   ch = strtok(NULL,DELIM);
 
   if(errno){
     fprintf(stderr,ENTITY_FAIL,strerror(errno));
     return -1;
-	}
+  }
 
   if(!ch){
     return -1;
@@ -147,16 +147,16 @@ int parseEntity(char * cmd){
     return -1;  
   }
 
-	/* */
-	
-	/* Height */
+  /* */
+
+  /* Height */
 
   ch = strtok(NULL,DELIM);
 
   if(errno){
     fprintf(stderr,ENTITY_FAIL,strerror(errno));
     return -1;
-	}
+  }
 
   if(!ch){
     return -1;
@@ -168,16 +168,16 @@ int parseEntity(char * cmd){
     return -1;  
   }
 
-	/* */
-	
-	/* Texture */
+  /* */
+
+  /* Texture */
 
   ch = strtok(NULL,DELIM);
 
   if(errno){
     fprintf(stderr,ENTITY_FAIL,strerror(errno));
     return -1;
-	}
+  }
 
   if(!ch){
     return -1;
@@ -187,7 +187,7 @@ int parseEntity(char * cmd){
   if(!entity.texture){
     return -1;  
   }
-  
+
   /* */
 
   /* Components */
@@ -197,7 +197,7 @@ int parseEntity(char * cmd){
   if(errno){
     fprintf(stderr,ENTITY_FAIL,strerror(errno));
     return -1;
-	}
+  }
 
   if(!ch){
     return -1;
@@ -208,7 +208,7 @@ int parseEntity(char * cmd){
     return -1;  
   }
 
-  insert_List(entityList,&entity);
+  insertList(entityList,&entity);
 
   return 0;
 

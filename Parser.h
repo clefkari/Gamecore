@@ -35,28 +35,28 @@ typedef struct{
 
 /* Node   ------------------------------------------------------------ */
 
-Node * new_Node (void * data, void * (*copy_func) (void *));
-void delete_Node (List * lp, Node ** np);
-void delete_AllNodes(Node ** np, List * lp);
-Node * lookup_Node (Node * np, void * data,
+Node * newNode (void * data, void * (*copy_func) (void *));
+void deleteNode (List * lp, Node ** np);
+void deleteAllNodes(Node ** np, List * lp);
+Node * lookupNode (Node * np, void * data,
 int (*equals_func)(void*,void*));
 
 
 /* List   ------------------------------------------------------------ */
 
-List * new_List (void * (*copy_func)(void *),
+List * newList (void * (*copy_func)(void *),
 		void (*delete_func)(void **),
 		int (*equals_func)(void*,void*));
 
-void delete_List (List ** lpp);
-void insert_List(List * lp, void * data);
-struct Node * remove_List (List * lp, void * data);
-Node * lookup_List (List * lp, void * data);
+void deleteList (List ** lpp);
+void insertList(List * lp, void * data);
+int removeList (List * lp, void * data);
+Node * lookupList (List * lp, void * data);
 
 /* Parser ------------------------------------------------------------ */
 
-Parser * new_Parser (void * (*copy_func)(void *),
+Parser * newParser (void * (*copy_func)(void *),
 		void (*delete_func)(void **));
-void delete_Parser(Parser ** parser);
+void deleteParser(Parser ** parser);
 
 #endif

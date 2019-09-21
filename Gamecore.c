@@ -54,12 +54,12 @@ int run(int argc, char * argv[]){
       /* Key Down Events */
 
       if(event.type == SDL_KEYDOWN){
-        
+
         /* Parse a Console Command */
 
         if(event.key.keysym.sym == SDLK_BACKQUOTE){
-					
-					fprintf(stdout,PROMPT);
+
+          fprintf(stdout,PROMPT);
           fgets(buffer,BUFFER_SIZE,stdin);
           ch = strchr(buffer,NEWLINE);
 
@@ -67,7 +67,7 @@ int run(int argc, char * argv[]){
 
             *ch = 0;
             parseEntity(buffer);
-          
+
           }
 
         }
@@ -107,8 +107,8 @@ int run(int argc, char * argv[]){
 
 
   /* Global Data List Deallocation. */
-  delete_List(&textureList);
-  delete_List(&entityList);
+  deleteList(&textureList);
+  deleteList(&entityList);
 
   /* SDL Clean up. */
   SDL_DestroyRenderer(renderer);
