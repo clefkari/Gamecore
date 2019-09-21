@@ -55,7 +55,7 @@ int equalsEntity(void * lhs, void * rhs){
 }
 
 /* initEntity
- *
+
  */
 
 int initEntity(int argc, char * argv[]){
@@ -207,7 +207,8 @@ int parseEntity(char * cmd){
   if(ch == endptr){
     return -1;  
   }
-
+  
+  /* Stack Entity is copied and inserted. */
   insertList(entityList,&entity);
 
   return 0;

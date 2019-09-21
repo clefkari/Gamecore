@@ -35,10 +35,6 @@ int run(int argc, char * argv[]){
   initTextures(renderer);
   initEntity(argc,argv);
 
-  /* texture = getTexture("water.bmp"); */
-
-  /* End Me */
-
   while (running) {
 
     while(SDL_PollEvent(&event)){
@@ -104,7 +100,6 @@ int run(int argc, char * argv[]){
     SDL_RenderPresent(renderer);
 
   }
-
 
   /* Global Data List Deallocation. */
   deleteList(&textureList);

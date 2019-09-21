@@ -14,12 +14,12 @@
 /* To identify Components, a long will be used to store up to 64 (or other
  * based on platform) bit flags representing a behavior/characteristic. */
 
-typedef unsigned long Component;
-
 /* Component Bit Flag Map (TODO) */
-#define PLAYER 0x1
-#define NPC 0x2
-#define SOLID 0x4
+typedef enum{
+PLAYER =  0x1,
+NPC = 0x2,
+SOLID = 0x4
+}Components;
 
 /* Global list of all entities in the game. */
 List * entityList;
@@ -41,7 +41,7 @@ typedef struct{
   SDL_Texture * texture;
   long x, y, w, h;
   unsigned long id;
-  Component comp;
+  Components comp;
 }Entity;
 
 void * newEntity(void * stackEntity);
