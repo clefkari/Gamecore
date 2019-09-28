@@ -21,9 +21,6 @@ NPC = 0x2,
 SOLID = 0x4
 }Components;
 
-/* Global list of all entities in the game. */
-List * entityList;
-
 /* struct Entity
 
    @ Members:
@@ -44,10 +41,10 @@ typedef struct{
   Components comp;
 }Entity;
 
-void * newEntity(void * stackEntity);
+void * copyEntity(void * data);
 void deleteEntity(void ** epp);
 int equalsEntity(void * lhs, void * rhs);
-int initEntity(int argc, char * argv[]);
-int parseEntity(char * cmd);
+int initEntity(List ** entityList);
+int parseEntity(List * entityList, List * textureList, char * cmd);
 
 #endif

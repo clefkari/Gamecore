@@ -4,7 +4,7 @@
 
 #include "Entity.h"
 
-static unsigned int entityCounter = 0;
+static unsigned long entityCounter = 0;
 
 /* We create a new entity by using a stack entity which will recieve the input
    from user or file. */
@@ -58,9 +58,9 @@ int equalsEntity(void * lhs, void * rhs){
 
  */
 
-int initEntity(int argc, char * argv[]){
+int initEntity(List ** entityList){
 
-  entityList = newList(copyEntity,deleteEntity,equalsEntity);
+  *entityList = newList(copyEntity,deleteEntity,equalsEntity);
 
   return 0;
 
@@ -74,7 +74,7 @@ int initEntity(int argc, char * argv[]){
  * @params - cmd - the string to tokenize.
  * @return - int - success/fail 0/-1 */
 
-int parseEntity(char * cmd){
+int parseEntity(List * entityList, List * textureList, char * cmd){
 
   /* Stack Struct to store input. */
   Entity entity = { 0 };
@@ -183,7 +183,7 @@ int parseEntity(char * cmd){
     return -1;
   }
 
-  entity.texture = getTexture(ch);
+  entity.texture = getTexture(textureList,ch);
   if(!entity.texture){
     return -1;  
   }

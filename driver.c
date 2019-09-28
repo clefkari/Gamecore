@@ -4,8 +4,19 @@
 
 #include "Gamecore.h"
 
-int main(int argc, char* argv[]){
+int main(int argc, char * argv[]){
 
-  return run(argc,argv);
+	Gamecore * core = newGamecore(argc,argv);
+
+	if(!core){
+
+		return -1;
+	
+	}
+
+	executeGamecore(core);
+	deleteGamecore(&core);
+
+  return 0;
 
 }

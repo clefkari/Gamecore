@@ -4,7 +4,7 @@
 
 #include "Parser.h"
 
-static long list_counter = 0;
+static unsigned long list_counter = 0;
 
 /* clrbuf
 
@@ -85,8 +85,8 @@ void deleteAllNodes(Node ** np, List * lp) {
    @return - List * - the List. */
 
 List * newList (void * (*copy_func)(void *),
-    void (*delete_func)(void **),
-    int (*equals_func)(void*,void*)) {
+void (*delete_func)(void **),
+int (*equals_func)(void*,void*)) {
 
   List * lp = (List*) malloc(sizeof(List));
   lp->occupancy = 0;
@@ -99,6 +99,7 @@ List * newList (void * (*copy_func)(void *),
   fprintf(stderr,LIST_MADE,(void*)lp,lp->list_count);
 
   return lp;
+
 }
 
 /* deleteList
@@ -110,11 +111,15 @@ List * newList (void * (*copy_func)(void *),
    Deallocates the passed List and all associated data members. */
 
 void deleteList (List ** lpp){
+
   fprintf(stderr,DELETE_LIST,(void*)*lpp,(*lpp)->list_count);
+
   list_counter--;
+
   deleteAllNodes(&(*lpp)->front,*lpp);
   free(*lpp);
   *lpp=0;
+
 }
 
 //TODO Validity checks on List pointers and others.
@@ -127,29 +132,35 @@ void deleteList (List ** lpp){
    is passed and stored. */
 
 void insertList(List * lp, void * data){
+
   /* If the list has no front Node, create it. */
   if(!lp->front){
+
     lp->front = newNode(data,lp->copy_func);
     /* Otherwise, push to the top. */
+
   }else{
+
     lp->front->next = newNode(data,lp->copy_func);
     lp->front->next->pre = lp->front;
-
     lp->front = lp->front->next;
+
   }
 
   fprintf(stderr,OCCUPANCY,++lp->occupancy);
 }
 
-/* remove_Node
+/* removeNode
 
    Finds and removes a Node by searching for the specified data field. */
 
 int removeList (List * lp, void * data){
+
   if(!lp->front)
     fprintf(stderr,NO_FRONT,(void*)lp,lp->occupancy);
 
   return 0;
+
 }
 
 
@@ -158,7 +169,7 @@ int removeList (List * lp, void * data){
 */
 
 Node * lookupNode (Node * np, void * data,
-    int (*equals_func)(void*,void*)){
+int (*equals_func)(void*,void*)){
 
   if(equals_func(data,np->data)){
 
@@ -172,7 +183,8 @@ Node * lookupNode (Node * np, void * data,
 
   }
 
-  return lookupNode (np->pre,data,equals_func);	
+  return lookupNode (np->pre,data,equals_func);
+
 }
 
 /* lookupList
@@ -183,6 +195,7 @@ Node * lookupNode (Node * np, void * data,
 Node * lookupList (List * lp, void * data){
 
   if(!lp->front){
+
     fprintf(stderr,NO_FRONT,(void*)lp,lp->occupancy);
 
     return NULL;
@@ -192,13 +205,15 @@ Node * lookupList (List * lp, void * data){
   Node * np = lookupNode(lp->front,data,lp->equals_func);
 
   return np;
+
 }
 
+/* newParser
 
-/* BOOKMARK ######################################################### strtok */
+*/
 
 Parser * newParser (void * (*copy_func)(void *),
-    void (*delete_func)(void **)) {
+void (*delete_func)(void **)) {
 
   Parser * parser = (Parser*) malloc(sizeof(Parser));
   parser->lp = newList(copy_func,delete_func,0);
@@ -206,13 +221,22 @@ Parser * newParser (void * (*copy_func)(void *),
   fprintf(stderr,PARSER_MADE,(void*)parser);
 
   return parser;
+
 }
 
+/* deleteParser
+
+*/
+
 void deleteParser(Parser ** parser){
-  deleteList(&((*parser)->lp));	
-  fprintf(stderr,DELETE_PARSER,(void*)*parser);	
+
+  deleteList(&((*parser)->lp));
+
+  fprintf(stderr,DELETE_PARSER,(void*)*parser);
+
   free(*parser);
   *parser=0;
+
 }
 
 /* tokenize_Parser

@@ -14,19 +14,16 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-/* Global list of all textures. */
-List * textureList;
-
 /* Texture data - with associated copy/delete functions. */
 typedef struct{
 SDL_Texture * texture;
 char * name;
 }Texture;
 
-int initTextures(SDL_Renderer * renderer);
+int initTextures(List ** textureList, SDL_Renderer * renderer);
 void * copyTexture(void * data);
 void deleteTexture(void ** data);
 int equalsTexture(void * lhs, void * rhs);
-SDL_Texture * getTexture(char * name);
+SDL_Texture * getTexture(List * textureList, char * name);
 
 #endif

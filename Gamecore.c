@@ -4,111 +4,128 @@
 
 #include "Gamecore.h"
 
-int run(int argc, char * argv[]){
-  SDL_Window *window;
-  SDL_Renderer *renderer;
-  SDL_Event event;
-  SDL_Rect d;
+Gamecore * newGamecore(int argc, char* argv[]){
 
-  Node * np;
+	Gamecore * gp;
 
-  char buffer [BUFFER_SIZE] = { 0 };
-  char * ch;
+	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't initialize SDL: %s", SDL_GetError());
+		return NULL;
+	}
 
-  int running = 1;
+	gp = (Gamecore*) malloc(sizeof(Gamecore));
 
-  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't initialize SDL: %s", SDL_GetError());
-    return 3;
-  }
+	gp->window = SDL_CreateWindow("Gamecore",
+			SDL_WINDOWPOS_UNDEFINED,
+			SDL_WINDOWPOS_UNDEFINED,
+			SCREEN_WIDTH, SCREEN_HEIGHT,
+			SDL_WINDOW_RESIZABLE);
 
-  window = SDL_CreateWindow("Gamecore",
-      SDL_WINDOWPOS_UNDEFINED,
-      SDL_WINDOWPOS_UNDEFINED,
-      SCREEN_WIDTH, SCREEN_HEIGHT,
-      SDL_WINDOW_RESIZABLE);
+	gp->renderer = SDL_CreateRenderer(gp->window, -1, 0);
 
+	initTextures(&gp->textureList, gp->renderer);
+	initEntity(&gp->entityList);
 
-  renderer = SDL_CreateRenderer(window, -1, 0);
+	gp->running = 1;
 
-  /* Global Data List Initialization. */
-  initTextures(renderer);
-  initEntity(argc,argv);
+	return gp;
 
-  while (running) {
+}
 
-    while(SDL_PollEvent(&event)){
+/* executeGamecore
 
-      /* Window Closing Event */
+ */
 
-      if(event.type == SDL_QUIT){
+int executeGamecore(Gamecore * gp){
 
-        running = 0;
+	char buffer [BUFFER_SIZE] = { 0 };
+	char * ch;
+	Node * np;
 
-      }
+	while (gp->running) {
 
-      /* Key Down Events */
+		while(SDL_PollEvent(&gp->event)){
 
-      if(event.type == SDL_KEYDOWN){
+			/* Window Closing Event */
 
-        /* Parse a Console Command */
+			if(gp->event.type == SDL_QUIT){
 
-        if(event.key.keysym.sym == SDLK_BACKQUOTE){
+				gp->running = 0;
+				break;
 
-          fprintf(stdout,PROMPT);
-          fgets(buffer,BUFFER_SIZE,stdin);
-          ch = strchr(buffer,NEWLINE);
+			}
 
-          if(ch){
+			/* Key Down Events */
 
-            *ch = 0;
-            parseEntity(buffer);
+			if(gp->event.type == SDL_KEYDOWN){
 
-          }
+				/* Parse a Console Command */
 
-        }
+				if(gp->event.key.keysym.sym == SDLK_BACKQUOTE){
 
-      }
+					fprintf(stdout,PROMPT);
+					fgets(buffer,BUFFER_SIZE,stdin);
+					ch = strchr(buffer,NEWLINE);
 
-    }
+					if(ch){
 
-    SDL_RenderClear(renderer);
+						*ch = 0;
+						parseEntity(gp->entityList,gp->textureList, buffer);
 
-    /* Boiler Plate */
+					}
 
-    np = entityList->front;
-    if(np){
+				}
 
-      while(np){
+			}
 
-        d.x = ((Entity*)(np->data))->x;
-        d.y = ((Entity*)(np->data))->y;
-        d.h = ((Entity*)(np->data))->h;
-        d.w = ((Entity*)(np->data))->w;
+		}
 
-        SDL_RenderCopy(renderer, ((Entity*)(np->data))->texture, 
-            NULL, &d);
+		SDL_RenderClear(gp->renderer);
 
-        np = np->pre;
+		/* Boiler Plate */
 
-      }
+		np = gp->entityList->front;
+		if(np){
 
-    }
+			while(np){
 
-    /* End Boiler Plate */
+				gp->rect.x = ((Entity*)(np->data))->x;
+				gp->rect.y = ((Entity*)(np->data))->y;
+				gp->rect.h = ((Entity*)(np->data))->h;
+				gp->rect.w = ((Entity*)(np->data))->w;
 
-    SDL_RenderPresent(renderer);
+				SDL_RenderCopy(gp->renderer, ((Entity*)(np->data))->texture, 
+						NULL, &gp->rect);
 
-  }
+				np = np->pre;
 
-  /* Global Data List Deallocation. */
-  deleteList(&textureList);
-  deleteList(&entityList);
+			}
 
-  /* SDL Clean up. */
-  SDL_DestroyRenderer(renderer);
-  SDL_Quit();
+		}
 
-  return 0;
+		/* End Boiler Plate */
+
+		SDL_RenderPresent(gp->renderer);
+
+	}
+
+	return 0;
+
+}
+
+void deleteGamecore(Gamecore ** gpp){
+
+	/* Data List Deallocation. */
+	deleteList(&(*gpp)->textureList);
+	deleteList(&(*gpp)->entityList);
+
+	/* SDL Clean up. */
+	SDL_DestroyRenderer((*gpp)->renderer);
+	SDL_DestroyWindow((*gpp)->window);
+	SDL_Quit();
+
+	/* Gamecore Deallocation */
+	free(*gpp);
+	*gpp=0;
 
 }
